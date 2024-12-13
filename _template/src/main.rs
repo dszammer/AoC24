@@ -1,6 +1,6 @@
 fn main() {
-    println!("Part 1: {}", part1(common::read_lines("./input1.txt")));
-    println!("Part 2: {}", part2(common::read_lines("./input2.txt")));
+    println!("Part 1: {}", part1(common::read_lines("./input.txt")));
+    println!("Part 2: {}", part2(common::read_lines("./input.txt")));
 }
 
 fn part1(input: Vec<String>) -> u64 {
