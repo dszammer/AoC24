@@ -3,3 +3,5 @@ day1/target
 day1/Cargo.lock
 _template/target
 _template/Cargo.lock
+day2/target
+day2/Cargo.lock
