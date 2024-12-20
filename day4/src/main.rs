@@ -57,7 +57,35 @@ fn part1(input: Vec<String>) -> u64 {
 
 #[allow(unused_variables)]
 fn part2(input: Vec<String>) -> u64 {
-    0
+    let mut result = 0;
+
+    let mut coords: Vec<(usize, usize)> = Vec::new();
+
+    input.iter().enumerate().for_each(|(i, line)| {
+        let indezes: Vec<_> = line.match_indices("A").collect();
+
+        indezes.iter().for_each(|(j, _)| {
+            coords.push((i, *j));
+        });
+    });
+
+    coords.iter().for_each(|(i, j)| {
+        if (1..input.len() - 1).contains(i)
+            && (1..input[0].len() - 1).contains(j)
+            && (input[*i - 1].as_bytes()[*j - 1] == b'M'
+                && input[*i + 1].as_bytes()[*j + 1] == b'S'
+                || input[*i - 1].as_bytes()[*j - 1] == b'S'
+                    && input[*i + 1].as_bytes()[*j + 1] == b'M')
+            && (input[*i - 1].as_bytes()[*j + 1] == b'M'
+                && input[*i + 1].as_bytes()[*j - 1] == b'S'
+                || input[*i - 1].as_bytes()[*j + 1] == b'S'
+                    && input[*i + 1].as_bytes()[*j - 1] == b'M')
+        {
+            result += 1;
+        }
+    });
+
+    result
 }
 
 fn rotate90(input: &[String]) -> Vec<String> {
@@ -176,6 +204,6 @@ mod tests {
 
     #[test]
     fn test_part2() {
-        assert_eq!(super::part2(get_test_input()), 0);
+        assert_eq!(super::part2(get_test_input()), 9);
     }
 }
