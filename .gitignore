@@ -11,3 +11,4 @@ day4/target
 day5/target
 day5/Cargo.lock
 day6/target
+.vscode/settings.json
