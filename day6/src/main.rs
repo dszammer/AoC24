@@ -101,8 +101,8 @@ fn part1(input: Vec<String>) -> u64 {
     let mut visited = Vec::<Position>::new();
 
     let map_bounds = Position {
-        x: input[0].len() as i64 - 1,
-        y: input.len() as i64 - 1,
+        x: input[0].len() as i64,
+        y: input.len() as i64,
     };
 
     let mut guard = get_guard(&input);
@@ -113,12 +113,11 @@ fn part1(input: Vec<String>) -> u64 {
         && guard.position.y >= 0
         && guard.position.y < map_bounds.y
     {
+        if !visited.contains(&guard.position) {
+            visited.push(guard.position.clone());
+        }
         if !obstacles.contains(&guard.next_position()) {
             guard.move_forward();
-
-            if !visited.contains(&guard.position) {
-                visited.push(guard.position.clone());
-            }
         } else {
             guard.turn_right();
         }
@@ -131,12 +130,12 @@ fn part2(input: Vec<String>) -> u64 {
     let obstacles = get_obstacles(&input);
 
     let map_bounds = Position {
-        x: input[0].len() as i64 - 1,
-        y: input.len() as i64 - 1,
+        x: input[0].len() as i64,
+        y: input.len() as i64,
     };
 
     let mut guard = get_guard(&input);
-    
+
     let mut visited: Vec<Position> = Vec::<Position>::new();
 
     visited.push(guard.position.clone()); // Add the starting position to the visited list
@@ -146,12 +145,12 @@ fn part2(input: Vec<String>) -> u64 {
         && guard.position.y >= 0
         && guard.position.y < map_bounds.y
     {
-        if !obstacles.contains(&guard.next_position()) {
-            guard.move_forward();
-
-            if !visited.contains(&guard.position) {
+        if !visited.contains(&guard.position) {
                 visited.push(guard.position.clone());
             }
+
+        if !obstacles.contains(&guard.next_position()) {
+            guard.move_forward();
         } else {
             guard.turn_right();
         }
@@ -161,12 +160,13 @@ fn part2(input: Vec<String>) -> u64 {
 
     let mut loop_ops = Vec::<Position>::new();
 
-    visited.iter().for_each(|position| {
+    visited.iter().for_each(|position: &Position| {
         let mut this_guard = guard.clone();
         let mut this_obstacles = obstacles.clone();
         let mut loop_visited = Vec::<Guard>::new();
-        
+
         loop_visited.push(this_guard.clone());
+
         this_obstacles.push(position.clone());
 
         while this_guard.position.x >= 0
@@ -183,7 +183,9 @@ fn part2(input: Vec<String>) -> u64 {
             if !loop_visited.contains(&this_guard) {
                 loop_visited.push(this_guard.clone());
             } else {
-                loop_ops.push(position.clone());
+                if !loop_ops.contains(&position) {
+                    loop_ops.push(position.clone());
+                }
                 break;
             }
         }
